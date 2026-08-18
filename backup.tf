@@ -18,9 +18,19 @@ resource "aws_iam_role_policy_attachment" "backup_policy" {
   role       = aws_iam_role.backup_role.name
 }
 
+resource "aws_iam_role_policy_attachment" "backup_s3_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AWSBackupServiceRolePolicyForS3Backup"
+  role       = aws_iam_role.backup_role.name
+}
+
+resource "aws_iam_role_policy_attachment" "restore_s3_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AWSBackupServiceRolePolicyForS3Restore"
+  role       = aws_iam_role.backup_role.name
+}
+
 resource "aws_backup_vault" "app_vault" {
-  name        = "${var.project_name}-backup-vault"
-  
+  name = "${var.project_name}-backup-vault"
+
   tags = {
     Name = "${var.project_name}-backup-vault"
   }
@@ -33,7 +43,7 @@ resource "aws_backup_plan" "daily_backup" {
     rule_name         = "daily-backup-rule"
     target_vault_name = aws_backup_vault.app_vault.name
     schedule          = "cron(0 5 ? * * *)"
-    
+
     lifecycle {
       delete_after = 14
     }

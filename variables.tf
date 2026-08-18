@@ -41,7 +41,13 @@ variable "db_username" {
 }
 
 variable "db_password" {
+  type      = string
+  sensitive = true
+  default   = "Fatec297nuvens"
+}
+
+variable "s3_bucket_name" {
+  description = "Nome do bucket S3 para armazenamento"
   type        = string
-  sensitive   = true
-  default     = "Fatec297nuvens" 
+  default     = "fatec297-app-storage"
 }
